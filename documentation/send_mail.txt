@@ -1,0 +1,2 @@
+J'utiliserai un service automatisé d'envoi de mail quand j'aurai le nom de domaine, utiliser ce site :
+https://app.mailersend.com/dashboard

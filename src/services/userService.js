@@ -1,6 +1,7 @@
 // Gère la logique métier pour les utilisateurs
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
+const RandomNumber = require('../random_number');
 
 const checkEmailExists = async (email) => {
   try {
@@ -15,12 +16,14 @@ const checkEmailExists = async (email) => {
 
 const createUser = async (email, password) => {
   try {
+    const code = RandomNumber()
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('Mot de passe hashé :', hashedPassword);
 
-    const [result] = await db.query('INSERT INTO users (email, password_hash) VALUES (?, ?)', [
+    const [result] = await db.query('INSERT INTO users (email, password_hash, code) VALUES (?, ?, ?)', [
       email,
       hashedPassword,
+      code,
     ]);
     console.log('Résultat de l\'insertion dans la base de données :', result);
   } catch (err) {
