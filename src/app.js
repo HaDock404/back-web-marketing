@@ -13,6 +13,7 @@ app.use(cors({
   origin: 'http://localhost:3000', // URL du frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Méthodes autorisées
   allowedHeaders: ['Content-Type', 'Authorization'], // En-têtes autorisés
+  credentials: true, // Autorise l'envoi des cookies
 }));
 
 app.use(express.json());
