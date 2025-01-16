@@ -29,7 +29,7 @@ const validateCodeHandler = async (req, res, next) => {
     }
 
     // Ajouter d'autres informations ou mettre à jour le statut de l'utilisateur
-    //await userService.activateUser(userEmail);
+    await userService.activateUser(userEmail);
 
     // Supprimer le cookie temporaire
     //res.clearCookie('temp_token');
