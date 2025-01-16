@@ -2,6 +2,45 @@
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
 
+const validateCodeHandler = async (req, res, next) => {
+  try {
+    // Récupérer le token temporaire depuis le cookie
+    const tempToken = req.cookies.temp_token;
+
+    if (!tempToken) {
+      return res.status(401).json({ message: 'Utilisateur non authentifié.' });
+    }
+
+    // Vérifier et décoder le token
+    const decoded = jwt.verify(tempToken, process.env.JWT_SECRET);
+    const userEmail = decoded.email; // Récupérer l'email de l'utilisateur depuis le token
+
+    // Récupérer le code envoyé par l'utilisateur
+    const { code } = req.body;
+
+    if (!code) {
+      return res.status(400).json({ message: 'Code requis.' });
+    }
+
+    // Vérifier si le code correspond dans la base de données
+    const isValid = await userService.validateUserCode(userEmail, code);
+    if (!isValid) {
+      return res.status(400).json({ message: 'Code invalide.' });
+    }
+
+    // Ajouter d'autres informations ou mettre à jour le statut de l'utilisateur
+    //await userService.activateUser(userEmail);
+
+    // Supprimer le cookie temporaire
+    //res.clearCookie('temp_token');
+
+    return res.status(200).json({ message: 'Code validé avec succès.' });
+  } catch (err) {
+    console.error('Erreur lors de la validation du code :', err);
+    next(err);
+  }
+};
+
 const createUserHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -47,6 +86,6 @@ const createUserHandler = async (req, res, next) => {
   }
 };
 
-module.exports = { createUserHandler };
+module.exports = { createUserHandler, validateCodeHandler };
 
 

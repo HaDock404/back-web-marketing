@@ -32,5 +32,25 @@ const createUser = async (email, password) => {
   }
 };
 
-module.exports = { checkEmailExists, createUser };
+const validateUserCode = async (email, code) => {
+  try {
+    const [rows] = await db.query('SELECT id FROM users WHERE email = ? AND code = ?', [email, code]);
+    return rows.length > 0; // Retourne true si le code est valide
+  } catch (err) {
+    console.error('Erreur lors de la validation du code :', err);
+    throw err;
+  }
+};
+
+const activateUser = async (email) => {
+  try {
+    await db.query('UPDATE users SET verified = 1 WHERE email = ?', [email]);
+    console.log('Utilisateur activé avec succès.');
+  } catch (err) {
+    console.error('Erreur lors de l\'activation de l\'utilisateur :', err);
+    throw err;
+  }
+};
+
+module.exports = { checkEmailExists, createUser, validateUserCode, activateUser };
 

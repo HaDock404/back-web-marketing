@@ -8,6 +8,9 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3001;
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 // Configuration CORS
 app.use(cors({
   origin: 'http://localhost:3000', // URL du frontend
