@@ -107,7 +107,6 @@ const loginUserHandler = async (req, res) => {
   }
 };
 
-
 module.exports = { createUserHandler, validateCodeHandler, loginUserHandler };
 
 
