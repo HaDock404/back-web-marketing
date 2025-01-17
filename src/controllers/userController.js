@@ -86,6 +86,28 @@ const createUserHandler = async (req, res, next) => {
   }
 };
 
-module.exports = { createUserHandler, validateCodeHandler };
+const loginUserHandler = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Email et mot de passe requis.' });
+  }
+
+  try {
+    const result = await userService.loginUser(email, password, res);
+
+    if (!result.success) {
+      return res.status(401).json(result);
+    }
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error('Erreur serveur dans loginUserHandler :', err);
+    res.status(500).json({ success: false, message: 'Erreur serveur.' });
+  }
+};
+
+
+module.exports = { createUserHandler, validateCodeHandler, loginUserHandler };
 
 
