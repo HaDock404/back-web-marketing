@@ -27,6 +27,10 @@ router.get('/dashboard', authenticateUser, async (req, res) => {
     } catch (err) {
       res.status(500).json({ success: false, message: 'Erreur serveur.' });
     }
-  });
+});
+
+router.get('/auth/validate', authenticateUser, (req, res) => {
+  res.status(200).json({ success: true, message: 'Utilisateur authentifié.' });
+});
 
 module.exports = router;
