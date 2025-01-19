@@ -39,7 +39,7 @@ const loginUser = async (email, password, res) => {
     const cleanEmail = email.trim();
 
     // Exécute la requête
-    const [rows] = await db.query('SELECT id, password_hash FROM users WHERE email = ?', [cleanEmail]);
+    const [rows] = await db.query('SELECT id, password_hash, verified FROM users WHERE email = ?', [cleanEmail]);
 
     // Vérification si l'utilisateur existe
     if (rows.length === 0) {
@@ -71,7 +71,11 @@ const loginUser = async (email, password, res) => {
     });
 
     console.log('Connexion réussie.');
-    return { success: true, message: 'Connexion réussie.' };
+    return { 
+      success: true, 
+      message: 'Connexion réussie.', 
+      data: { verified: user.verified } 
+    };
   } catch (err) {
     console.error('Erreur lors de la connexion de l\'utilisateur :', err);
     throw err;
